@@ -3,11 +3,11 @@ from box.exceptions import BoxValueError
 import yaml
 from Berlin_House_Price_Prediction import logger
 import json
-import joblib
+import joblib               # use to load ad unload binary file
 from ensure import ensure_annotations # (x: type of x) -> return type __ # like typescript
 from box import ConfigBox   # allows us to use keys of dict as obj.key insted of obj["key"] -- useful of yaml file as we will use ot of configuration
-from pathlib import Path
-from typing import Any
+from pathlib import Path    # is a class which defines data type as Path
+from typing import Any      # is a class similar to Path
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path)->ConfigBox:
