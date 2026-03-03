@@ -2,7 +2,7 @@ from Berlin_House_Price_Prediction.constants import *
 from Berlin_House_Price_Prediction.utils.common import read_yaml,create_directories
 from Berlin_House_Price_Prediction.entity.config_entity import DataIngestionConfig
 from Berlin_House_Price_Prediction.entity.config_entity import DataValidationConfig
-
+from Berlin_House_Price_Prediction.entity.config_entity import DataTransformationConfig
 
 # this class has a constructor which reads the yaml files
 class ConfigurationManger:
@@ -49,3 +49,21 @@ class ConfigurationManger:
         )
 
         return data_validation_config
+    
+    def get_data_transformation_config(self)->DataTransformationConfig:
+        config = self.config.data_transformation
+
+        create_directories([config.root_directory])
+
+        data_transformation_config = DataTransformationConfig(
+            root_directory= config.root_directory,
+            data_path= config.data_path,
+            test_size= config.test_size,
+            random_state= config.random_state,
+            features= config.features,
+            target= config.target,
+            numeric_features= config.numeric_features,
+            categorical_features= config.categorical_features
+        )
+
+        return data_transformation_config
