@@ -5,3 +5,8 @@ data_ingestion:
   source_url: https://github.com/Aditya0135/Datasets/raw/refs/heads/main/BerlinHousingData.zip
   local_data_file: artifacts/data_ingestion/data.zip
   unzip_dir:  artifacts/data_ingestion
+
+data_validation:
+  root_directory: artifacts/data_validation
+  unzip_data_dir: artifacts/data_ingestion/real_estate_listings_clean.csv
+  STATUS_FILE: artifacts/data_validation/status.txt

@@ -1,6 +1,7 @@
 from Berlin_House_Price_Prediction.constants import *
 from Berlin_House_Price_Prediction.utils.common import read_yaml,create_directories
 from Berlin_House_Price_Prediction.entity.config_entity import DataIngestionConfig
+from Berlin_House_Price_Prediction.entity.config_entity import DataValidationConfig
 
 
 # this class has a constructor which reads the yaml files
@@ -32,3 +33,19 @@ class ConfigurationManger:
         )
         
         return data_ingestion_config
+    
+
+    def get_data_validation_config(self)->DataValidationConfig:
+        config = self.config.data_validation
+        schema = self.schema.COLUMNS
+
+        create_directories([config.root_directory])
+
+        data_validation_config = DataValidationConfig(
+            root_directory= config.root_directory,
+            unzip_data_dir= config.unzip_data_dir,
+            STATUS_FILE = config.STATUS_FILE,
+            all_schema= schema,
+        )
+
+        return data_validation_config

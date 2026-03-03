@@ -1,1 +1,15 @@
-key: value
+COLUMNS:
+  url: object
+  energy: object
+  heating: object
+  area: float64
+  price: float64
+  rooms: float64
+  zipcode: float64
+  fee: float64
+  construction_year: float64
+  level: float64
+  price_per_area: float64
+
+TARGET_COLUMN:
+  name: price
