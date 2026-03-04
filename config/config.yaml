@@ -11,24 +11,26 @@ data_validation:
   unzip_data_dir: artifacts/data_ingestion/real_estate_listings_clean.csv
   STATUS_FILE: artifacts/data_validation/status.txt
 
-  data_transformation:
-    root_directory: artifacts/data_transformation
-    data_path: artifacts/data_ingestion/real_estate_listings_clean.csv
-    test_size: 0.2
-    random_state: 42
+data_transformation:
+  root_directory: artifacts/data_transformation
+  data_path: artifacts/data_ingestion/real_estate_listings_clean.csv
+  test_size: 0.2
+  random_state: 42
 
-    features:
-      - area
-      - rooms
-      - heating
-      - energy
-      - zipcode
+  features:
+    - area
+    - rooms
+    - heating
+    - energy
+    - zipcode
 
-    numeric_features:
-      - area
-      - rooms
+  numeric_features:
+    - area
+    - rooms
 
-    categorical_features:
-      - heating
-      - energy
-      - zipcode
+  categorical_features:
+    - heating
+    - energy
+    - zipcode
+
+  target: price
