@@ -208,7 +208,7 @@ __marimo__/
 
 artifacts/*
 src/Berlin_House_Price_Prediction.egg-info/*
-src/research/data/*
-src/research/trials/*
+research/data/*
+research/trials
 
 
