@@ -207,3 +207,8 @@ marimo/_lsp/
 __marimo__/
 
 artifacts/*
+src/Berlin_House_Price_Prediction.egg-info/*
+src/research/data/*
+src/research/trials/*
+
+
