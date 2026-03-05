@@ -1,8 +1,6 @@
 from Berlin_House_Price_Prediction.constants import *
 from Berlin_House_Price_Prediction.utils.common import read_yaml,create_directories
-from Berlin_House_Price_Prediction.entity.config_entity import DataIngestionConfig
-from Berlin_House_Price_Prediction.entity.config_entity import DataValidationConfig
-from Berlin_House_Price_Prediction.entity.config_entity import DataTransformationConfig
+from Berlin_House_Price_Prediction.entity.config_entity import DataIngestionConfig,DataTransformationConfig,DataValidationConfig,ModelTrainerConfig
 
 # this class has a constructor which reads the yaml files
 class ConfigurationManger:
@@ -67,3 +65,22 @@ class ConfigurationManger:
         )
 
         return data_transformation_config
+    
+    def get_model_trainer_config(self)->ModelTrainerConfig:
+        config = self.config.model_trainer
+        params = self.params.GradientBoostingRegressor
+
+        create_directories([config.root_directory])
+
+        model_trainer_config = ModelTrainerConfig(
+            root_directory= config.root_directory,
+            train_data_path= config.train_data_path,
+            test_data_path= config.test_data_path,
+            model_name= config.model_name,
+            n_estimators= params.n_estimators,
+            learning_rate= params.learning_rate,
+            random_state= params.random_state,
+            target_column= self.schema.TARGET_COLUMN
+        )
+
+        return model_trainer_config

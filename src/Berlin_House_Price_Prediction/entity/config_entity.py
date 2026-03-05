@@ -27,3 +27,14 @@ class DataTransformationConfig:
     target: str
     numeric_features: list
     categorical_features: list
+
+@dataclass(frozen=True)
+class ModelTrainerConfig:
+    root_directory: Path
+    train_data_path: Path
+    test_data_path: Path
+    model_name: str
+    n_estimators: int
+    learning_rate:float
+    random_state: int
+    target_column: str

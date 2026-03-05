@@ -169,6 +169,9 @@ class DataTransformation:
         X_train, X_test, y_train, y_test= self.split_data(X,y)
         X_train, X_test = self.scale_data(X_train,X_test)
 
-        pd.DataFrame(X_train).to_csv(os.path.join(self.config.root_directory, "train.csv"), index=False)
-        pd.DataFrame(X_test).to_csv(os.path.join(self.config.root_directory, "test.csv"), index=False)
+        train_df = pd.concat([X_train, y_train], axis=1)
+        test_df = pd.concat([X_test, y_test], axis=1)
+
+        train_df.to_csv(os.path.join(self.config.root_directory, "train.csv"), index=False)
+        test_df.to_csv(os.path.join(self.config.root_directory, "test.csv"), index=False)
         return X_train, X_test, y_train, y_test
