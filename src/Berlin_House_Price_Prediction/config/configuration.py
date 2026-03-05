@@ -1,6 +1,6 @@
 from Berlin_House_Price_Prediction.constants import *
 from Berlin_House_Price_Prediction.utils.common import read_yaml,create_directories
-from Berlin_House_Price_Prediction.entity.config_entity import DataIngestionConfig,DataTransformationConfig,DataValidationConfig,ModelTrainerConfig
+from Berlin_House_Price_Prediction.entity.config_entity import DataIngestionConfig,DataTransformationConfig,DataValidationConfig,ModelTrainerConfig,ModelEvaluationConfig
 
 # this class has a constructor which reads the yaml files
 class ConfigurationManger:
@@ -84,3 +84,24 @@ class ConfigurationManger:
         )
 
         return model_trainer_config
+    
+    def get_model_evaluation_config(self)->ModelEvaluationConfig:
+        config = self.config.model_evaluation
+        params = self.params.GradientBoostingRegressor
+        schema = self.schema.TARGET_COLUMN
+
+        create_directories([config.root_directory])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_directory= config.root_directory,
+            test_data_path= config.test_data_path,
+            model_path= config.model_path,
+            all_params= params,
+            metric_file_name= config.metric_file_name,
+            target_column= schema.name,
+            mlflow_uri= "https://dagshub.com/Aditya0135/Berlin_House_Price_Prediction.mlflow",
+        )
+
+        return model_evaluation_config
+    
+    

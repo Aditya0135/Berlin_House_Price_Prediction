@@ -217,9 +217,10 @@ with mlflow.start_run():
   mlflow.log_param('parameter name', 'value')
   mlflow.log_metric('metric name', 1)
 
-  ML_FLow_Tracking_URI = https://dagshub.com/Aditya0135/Berlin_House_Price_Prediction.mlflow
-  ML_Flow_tracking_username= Aditya0135
-  ML_Flow_access_token= 6e8a8ddb2d0dd8158f49b382417192f326f6c900
+    run this in bash
+    export MLFLOW_TRACKING_URI=https://dagshub.com/Aditya0135/Berlin_House_Price_Prediction.mlflow
+    export MLFLOW_TRACKING_USERNAME=Aditya0135
+    export MLFLOW_TRACKING_PASSWORD=6e8a8ddb2d0dd8158f49b382417192f326f6c900
 ---
 
 # Pipeline Execution Flow
