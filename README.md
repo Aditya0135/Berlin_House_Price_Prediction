@@ -207,6 +207,19 @@ python main.py
 python app.py
 ```
 
+## 6. Dogshub
+import dagshub
+dagshub.init(repo_owner='Aditya0135', repo_name='Berlin_House_Price_Prediction', mlflow=True)
+
+How to track-:
+import mlflow
+with mlflow.start_run():
+  mlflow.log_param('parameter name', 'value')
+  mlflow.log_metric('metric name', 1)
+
+  ML_FLow_Tracking_URI = https://dagshub.com/Aditya0135/Berlin_House_Price_Prediction.mlflow
+  ML_Flow_tracking_username= Aditya0135
+  ML_Flow_access_token= 6e8a8ddb2d0dd8158f49b382417192f326f6c900
 ---
 
 # Pipeline Execution Flow
