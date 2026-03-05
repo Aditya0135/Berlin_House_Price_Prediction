@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Berlin House Price Prediction</title>
+
+<style>
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(135deg,#1e3c72,#2a5298);
+    height:100vh;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    background:white;
+    padding:40px;
+    border-radius:10px;
+    width:400px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#2a5298;
+    color:white;
+    font-size:16px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1e3c72;
+}
+
+.result{
+    margin-top:20px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Berlin House Price Predictor</h1>
+
+<form action="/predict" method="POST">
+
+<label>Area (m²)</label>
+<input type="number" name="area" required>
+
+<label>Rooms</label>
+<input type="number" name="rooms" required>
+
+<label>Zipcode</label>
+<input type="number" name="zipcode" required>
+
+<label>Heating Type</label>
+<select name="heating">
+
+<option value="Fernwärme">Fernwärme</option>
+<option value="Fußbodenheizung">Fußbodenheizung</option>
+<option value="Gas">Gas</option>
+<option value="Heizungsart">Heizungsart</option>
+<option value="Kamin">Kamin</option>
+<option value="Other">Other</option>
+<option value="Wärmepumpe">Wärmepumpe</option>
+<option value="Zentralheizung">Zentralheizung</option>
+
+</select>
+
+<label>Energy Source</label>
+<select name="energy">
+
+<option value="Elektro">Elektro</option>
+<option value="Fernwärme">Fernwärme</option>
+<option value="Gas">Gas</option>
+<option value="Other">Other</option>
+<option value="Wärmepumpe">Wärmepumpe</option>
+<option value="Öl">Öl</option>
+
+</select>
+
+<button type="submit">Predict Price</button>
+
+</form>
+
+{% if prediction %}
+<div class="result">
+Predicted Price: € {{prediction}}
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>
