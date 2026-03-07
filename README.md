@@ -222,6 +222,24 @@ with mlflow.start_run():
     export MLFLOW_TRACKING_USERNAME=Aditya0135
     export MLFLOW_TRACKING_PASSWORD=6e8a8ddb2d0dd8158f49b382417192f326f6c900
 ---
+    AWS ECR repo 
+    URI- 126984677171.dkr.ecr.eu-north-1.amazonaws.com/berlin-house-price-prediction
+
+    #optinal
+
+sudo apt-get update -y
+
+sudo apt-get upgrade
+
+#required
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+
+sudo sh get-docker.sh
+
+sudo usermod -aG docker ubuntu
+
+newgrp docker
 
 # Pipeline Execution Flow
 

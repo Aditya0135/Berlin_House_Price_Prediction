@@ -41,9 +41,8 @@ class PredictionPipeline:
 
         x = self.create_vector(zipcode=zipcode, area=area, rooms=rooms,
                                energy=energy, heating=heating)
-        
-        # scale only numeric features (example: area, rooms)
-        numeric_idx = [self.index_dict["area"], self.index_dict["rooms"]]
+
+        numeric_idx = [self.index_dict["area"], self.index_dict["rooms"], self.index_dict["zipcode"]]
         x[0, numeric_idx] = self.scaler.transform(x[0, numeric_idx].reshape(1, -1))
         
         return self.model.predict(x)
