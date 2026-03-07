@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import pandas as pd
+import os
 from Berlin_House_Price_Prediction.pipeline.prediction import PredictionPipeline
 
 app = Flask(__name__)
@@ -26,10 +27,17 @@ def predict():
         "energy":[energy]
     })
 
-    pipeline = PredictionPipeline()
-    prediction = pipeline.predict(data)
+    predict_pipeline = PredictionPipeline()
+
+
+    prediction = predict_pipeline.predict(data)
 
     return render_template("index.html", prediction=round(prediction[0],2))
+
+@app.route('/train', methods=['GET'])
+def training():
+    os.system("python main.py")
+    return "Training Successful!!"
 
 
 if __name__ == "__main__":

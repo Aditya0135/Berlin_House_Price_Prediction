@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.ensemble import GradientBoostingRegressor
+from xgboost import XGBRegressor
 from Berlin_House_Price_Prediction.config.configuration import ModelTrainerConfig
 from Berlin_House_Price_Prediction import logger
 import os
@@ -22,7 +22,7 @@ class ModelTrainer:
             y_test = test_data[self.config.target_column.name]
 
             # Initialize the model with parameters from params.yaml
-            model = GradientBoostingRegressor(
+            model = XGBRegressor(
                 n_estimators=self.config.n_estimators,
                 learning_rate=self.config.learning_rate,
                 random_state=self.config.random_state

@@ -87,7 +87,7 @@ class ConfigurationManger:
     
     def get_model_evaluation_config(self)->ModelEvaluationConfig:
         config = self.config.model_evaluation
-        params = self.params.GradientBoostingRegressor
+        params = self.params.XGBRegressor
         schema = self.schema.TARGET_COLUMN
 
         create_directories([config.root_directory])

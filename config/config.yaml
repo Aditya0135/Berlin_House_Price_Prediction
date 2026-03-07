@@ -27,11 +27,11 @@ data_transformation:
   numeric_features:
     - area
     - rooms
-
+    - zipcode
   categorical_features:
     - heating
     - energy
-    - zipcode
+    
 
   target: price
 

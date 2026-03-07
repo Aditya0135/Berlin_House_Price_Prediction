@@ -12,4 +12,5 @@ pyYAML
 python-box
 joblib
 tqdm
--e .
+xgboost
+#-e .

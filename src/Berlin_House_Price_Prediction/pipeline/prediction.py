@@ -1,50 +1,49 @@
 import joblib
 import numpy as np
-import pandas as pd
 from pathlib import Path
 
 class PredictionPipeline:
     def __init__(self):
         self.model = joblib.load(Path("artifacts/model_trainer/model.joblib"))
+        self.scaler = joblib.load(Path("artifacts/data_transformation/scaler.joblib"))
+        self.columns = list(self.model.feature_names_in_)
+        self.index_dict = dict(zip(self.columns, range(len(self.columns))))
 
-    def preprocess(self,data):
-        # Implement any necessary preprocessing steps here
-        """
-        input_dict example:
-        {
-            'zipcode': 10115,
-            'heating': 'Gas',
-            'energy': 'Gas',
-            'area': 100,
-            'rooms': 3
-        }
-        """
-        # Convert dict to dataframe
-        df = pd.DataFrame([data])
+    def create_vector(self, zipcode, area, rooms, energy, heating):
+        new_vector = np.zeros(len(self.columns))
 
-        # One-hot encode categorical features
-        cat_features = ['zipcode', 'heating', 'energy']  # all categorical
-        encoded = self.encoder.transform(df[cat_features])
-        encoded_df = pd.DataFrame(
-            encoded,
-            columns=self.encoder.get_feature_names_out(cat_features)
-        )
+        # numeric features
+        if "rooms" in self.index_dict:
+            new_vector[self.index_dict["rooms"]] = rooms
 
-        # Drop original categorical columns and concat encoded
-        df = df.drop(columns=cat_features)
-        df = pd.concat([df, encoded_df], axis=1)
+        if "area" in self.index_dict:
+            new_vector[self.index_dict["area"]] = area
 
-        # Ensure all columns match training set
-        for col in self.feature_columns:
-            if col not in df.columns:
-                df[col] = 0  # add missing columns as 0
+        # categorical features
+        if energy in self.index_dict:
+            new_vector[self.index_dict[energy]] = 1
 
-        # Keep only the columns in the same order as training
-        df = df[self.feature_columns]
+        if heating in self.index_dict:
+            new_vector[self.index_dict[heating]] = 1
 
-        return df
+        if zipcode in self.index_dict:
+            new_vector[self.index_dict[zipcode]] = 1
+
+        return new_vector.reshape(1, -1)
 
     def predict(self, data):
-        data = self.preprocess(data)
-        prediction = self.model.predict(data)
-        return prediction
+        # extract scalar values from DataFrame
+        rooms = data["rooms"].iloc[0]
+        zipcode = data["zipcode"].iloc[0]
+        area = data["area"].iloc[0]
+        energy = data["energy"].iloc[0]
+        heating = data["heating"].iloc[0]
+
+        x = self.create_vector(zipcode=zipcode, area=area, rooms=rooms,
+                               energy=energy, heating=heating)
+        
+        # scale only numeric features (example: area, rooms)
+        numeric_idx = [self.index_dict["area"], self.index_dict["rooms"]]
+        x[0, numeric_idx] = self.scaler.transform(x[0, numeric_idx].reshape(1, -1))
+        
+        return self.model.predict(x)

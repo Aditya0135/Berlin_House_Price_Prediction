@@ -1,5 +1,5 @@
 import os
-
+import joblib
 from Berlin_House_Price_Prediction.config.configuration import DataTransformationConfig
 import pandas as pd
 import numpy as np
@@ -152,7 +152,8 @@ class DataTransformation:
         X_test[self.numeric_features] = self.scaler.transform(
             X_test[self.numeric_features]
         )
-
+        # save fitted scaler
+        joblib.dump(self.scaler, "artifacts/data_transformation/scaler.joblib")
         return X_train, X_test
     
     def run_transformation_pipeline(self):
