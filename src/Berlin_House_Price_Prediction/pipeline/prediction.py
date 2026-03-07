@@ -18,6 +18,9 @@ class PredictionPipeline:
 
         if "area" in self.index_dict:
             new_vector[self.index_dict["area"]] = area
+        
+        if "zipcode" in self.index_dict:
+            new_vector[self.index_dict["zipcode"]] = zipcode
 
         # categorical features
         if energy in self.index_dict:
@@ -25,9 +28,6 @@ class PredictionPipeline:
 
         if heating in self.index_dict:
             new_vector[self.index_dict[heating]] = 1
-
-        if zipcode in self.index_dict:
-            new_vector[self.index_dict[zipcode]] = 1
 
         return new_vector.reshape(1, -1)
 
