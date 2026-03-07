@@ -68,7 +68,7 @@ class ConfigurationManger:
     
     def get_model_trainer_config(self)->ModelTrainerConfig:
         config = self.config.model_trainer
-        params = self.params.GradientBoostingRegressor
+        params = self.params.XGBRegressor
 
         create_directories([config.root_directory])
 
