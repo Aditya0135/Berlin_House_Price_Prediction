@@ -6,8 +6,8 @@ WORKDIR /app
 COPY . /app
 RUN pip install -r requirements.txt
 
-# Make /app visible as a module path
-ENV PYTHONPATH=/app
+# Add src folder to PYTHONPATH so imports work
+ENV PYTHONPATH=/app/src
 
 EXPOSE 8080
-CMD [ "python3", "app.py" ]
+CMD ["python3", "app.py"]
