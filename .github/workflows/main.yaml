@@ -66,12 +66,13 @@ jobs:
   Continuous-Deployment:
     needs: build-and-push-ecr-image
     runs-on: self-hosted
+  
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -79,21 +80,18 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      
-      
-      - name: Pull latest images
+        uses: aws-actions/amazon-ecr-login@v2
+  
+      - name: Pull latest image
         run: |
-         docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-         
-      - name: Stop old container
+          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+  
+      - name: Stop old container if exists
         run: |
-          docker ps -q --filter "name=berlin-house-price-prediction-machine" \
-          | grep -q . && docker stop berlin-house-price-prediction-machine \
-          && docker rm -fv berlin-house-price-prediction-machine
-       
-      - name: Run Docker Image to serve users
+          docker ps -aq --filter "name=berlin-house-price-prediction-machine" | xargs -r docker rm -f
+  
+      - name: Run Docker container
         run: |
-         docker run -d -p 8080:8080 \
-          --name berlin-house-price-prediction-machine \
-          ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          docker run -d -p 8080:8080 \
+            --name berlin-house-price-prediction-machine \
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
