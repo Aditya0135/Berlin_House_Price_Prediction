@@ -86,15 +86,14 @@ jobs:
         run: |
          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
-      # - name: Stop and remove container if running
-      #   run: |
-      #    docker ps -q --filter "name=mlproj" | grep -q . && docker stop mlproj && docker rm -fv mlproj
+      - name: Stop old container
+        run: |
+          docker ps -q --filter "name=berlin-house-price-prediction-machine" \
+          | grep -q . && docker stop berlin-house-price-prediction-machine \
+          && docker rm -fv berlin-house-price-prediction-machine
        
       - name: Run Docker Image to serve users
         run: |
          docker run -d -p 8080:8080 \
           --name berlin-house-price-prediction-machine \
           ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-      - name: Clean previous images and containers
-        run: |
-         docker system prune -f
