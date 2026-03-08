@@ -86,11 +86,11 @@ jobs:
         run: |
          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
-      - name: Stop old container
-        run: |
-          docker ps -q --filter "name=berlin-house-price-prediction-machine" \
-          | grep -q . && docker stop berlin-house-price-prediction-machine \
-          && docker rm -fv berlin-house-price-prediction-machine
+      # - name: Stop old container
+      #   run: |
+      #     docker ps -q --filter "name=berlin-house-price-prediction-machine" \
+      #     | grep -q . && docker stop berlin-house-price-prediction-machine \
+      #     && docker rm -fv berlin-house-price-prediction-machine
        
       - name: Run Docker Image to serve users
         run: |
