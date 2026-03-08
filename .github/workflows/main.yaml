@@ -63,70 +63,70 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
           
           
-Continuous-Deployment:
-  needs: build-and-push-ecr-image
-  runs-on: self-hosted
+  Continuous-Deployment:
+    needs: build-and-push-ecr-image
+    runs-on: self-hosted
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Debug Runner Info
-      run: |
-        echo "Current user:"
-        whoami
-        echo "Current directory:"
-        pwd
-        echo "Files:"
-        ls -la
-        echo "Docker version:"
-        docker --version
-        echo "Docker running containers:"
-        docker ps
-        echo "Docker images:"
-        docker images
+      - name: Debug Runner Info
+        run: |
+          echo "Current user:"
+          whoami
+          echo "Current directory:"
+          pwd
+          echo "Files:"
+          ls -la
+          echo "Docker version:"
+          docker --version
+          echo "Docker running containers:"
+          docker ps
+          echo "Docker images:"
+          docker images
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Print AWS Info
-      run: |
-        echo "AWS Region: ${{ secrets.AWS_REGION }}"
-        aws sts get-caller-identity
+      - name: Print AWS Info
+        run: |
+          echo "AWS Region: ${{ secrets.AWS_REGION }}"
+          aws sts get-caller-identity
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Debug ECR Variables
-      run: |
-        echo "Registry: ${{ steps.login-ecr.outputs.registry }}"
-        echo "Repository: ${{ secrets.ECR_REPOSITORY_NAME }}"
-        echo "Full image:"
-        echo "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
+      - name: Debug ECR Variables
+        run: |
+          echo "Registry: ${{ steps.login-ecr.outputs.registry }}"
+          echo "Repository: ${{ secrets.ECR_REPOSITORY_NAME }}"
+          echo "Full image:"
+          echo "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest"
 
-    - name: Pull latest image
-      run: |
-        echo "Pulling image..."
-        docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+      - name: Pull latest image
+        run: |
+          echo "Pulling image..."
+          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
-    - name: Stop old container if exists
-      run: |
-        echo "Checking for old container..."
-        docker ps -a
-        docker ps -aq --filter "name=berlin-house-price-prediction-machine"
-        docker ps -aq --filter "name=berlin-house-price-prediction-machine" | xargs -r docker rm -f
+      - name: Stop old container if exists
+        run: |
+          echo "Checking for old container..."
+          docker ps -a
+          docker ps -aq --filter "name=berlin-house-price-prediction-machine"
+          docker ps -aq --filter "name=berlin-house-price-prediction-machine" | xargs -r docker rm -f
 
-    - name: Run Docker container
-      run: |
-        echo "Running container..."
-        docker run -d -p 8080:8080 \
-          --name berlin-house-price-prediction-machine \
-          ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+      - name: Run Docker container
+        run: |
+          echo "Running container..."
+          docker run -d -p 8080:8080 \
+            --name berlin-house-price-prediction-machine \
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
-        echo "Containers after run:"
-        docker ps
+          echo "Containers after run:"
+          docker ps
