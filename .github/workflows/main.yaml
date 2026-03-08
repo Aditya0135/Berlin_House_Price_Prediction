@@ -96,7 +96,6 @@ jobs:
       - name: Print AWS Info
         run: |
           echo "AWS Region: ${{ secrets.AWS_REGION }}"
-          aws sts get-caller-identity
 
       - name: Login to Amazon ECR
         id: login-ecr
