@@ -1,298 +1,152 @@
 # Berlin House Price Prediction
 
-End-to-end machine learning pipeline to predict house prices in Berlin using structured housing data.
-This project is designed with an **industry-style ML architecture**, where each stage of the pipeline is modular, configurable, and reproducible.
+End-to-end machine learning project to predict **house prices in Berlin** using structured housing data.  
+The project follows an **industry-style ML architecture** including data pipelines, experiment tracking, containerization, and cloud deployment.
 
 ---
 
-# Project Goal
+## Project Overview
 
-The objective of this project is to build a production-like machine learning system that:
+This project implements a complete ML workflow:
 
-* Ingests raw housing data
-* Validates dataset structure
-* Cleans and transforms data
-* Trains multiple regression models
-* Evaluates model performance
-* Serves predictions through an application
-
-This project focuses not only on modeling but also on **ML system design**.
+- Data ingestion and validation
+- Data transformation and preprocessing
+- Training and evaluation of multiple regression models
+- Automatic selection of the best-performing model
+- Prediction serving using a Flask web application
+- Experiment tracking with MLflow
+- Docker containerization and AWS deployment
 
 ---
 
-# Features Used
+## Features
 
-The model currently uses these input features:
+Input features:
 
-* area
-* rooms
-* heating
-* energy
-* zipcode
+- area
+- rooms
+- heating
+- energy
+- zipcode
 
 Target variable:
 
 ```
+
 price
+
+```
+
+Dataset source:
+
+```
+
+https://www.kaggle.com/code/elhamrajabnezhad/real-estate-listings-apr2023-berlin
+
 ```
 
 ---
 
-# Machine Learning Pipeline
-
-## 1. Data Ingestion
-
-Responsible for:
-
-* Loading dataset
-* Extracting raw files
-* Storing data in artifacts folder
-
-Output:
+## Machine Learning Pipeline
 
 ```
-artifacts/data_ingestion/
+
+Data Ingestion
+↓
+Data Validation
+↓
+Data Transformation
+↓
+Model Training
+↓
+Model Evaluation
+↓
+Prediction Application
+
 ```
+
+Multiple models were trained (Linear Regression, Random Forest, Gradient Boosting, SVR, etc.), and the **best model was selected based on performance**.
 
 ---
 
-## 2. Data Validation
+## Run the Project Locally
 
-Ensures dataset quality before training.
-
-Validation checks include:
-
-* Column existence
-* Schema validation
-* Data types
-* Dataset consistency
-
-All validation rules are defined in:
+Clone repository
 
 ```
-schema.yaml
-```
 
----
-
-## 3. Data Transformation
-
-This stage performs **data cleaning and preprocessing**.
-
-Operations include:
-
-* Cleaning categorical columns
-* Removing commas and unnecessary text
-* Handling rare categories
-* Outlier removal
-* Missing value imputation
-* Feature encoding (One-Hot Encoding)
-* Train/Test split
-* Feature scaling
-
-Output:
-
-```
-Cleaned and transformed dataset
-```
-
----
-
-## 4. Model Training
-
-Multiple models are trained and evaluated:
-
-* Linear Regression
-* Ridge
-* Lasso
-* ElasticNet
-* Random Forest
-* Gradient Boosting
-* Support Vector Regressor
-
-Evaluation metrics:
-
-* R² Score
-* Mean Squared Error
-
-The best-performing model is selected automatically.
-
----
-
-# Configuration System
-
-The pipeline is controlled using configuration files.
-
-## config.yaml
-
-Defines pipeline paths and folder structure.
-
-Example:
-
-```
-artifacts_root: artifacts
-
-data_ingestion:
-  root_dir: artifacts/data_ingestion
-```
-
----
-
-## schema.yaml
-
-Defines dataset structure and expected data types.
-
-Example:
-
-```
-COLUMNS:
-  area: float64
-  rooms: float64
-  heating: object
-  energy: object
-  zipcode: float64
-  price: float64
-
-TARGET_COLUMN:
-  name: price
-```
-
----
-
-## params.yaml
-
-Contains model hyperparameters.
-
-Example:
-
-```
-RandomForest:
-  n_estimators: 100
-  max_depth: 10
-```
-
----
-
-# How to Run the Project
-
-## 1. Clone the Repository
-
-```
-git clone <your-repository-url>
+git clone https://github.com/Aditya0135/Berlin_House_Price_Prediction
 cd Berlin_House_Price_Prediction
-```
-
-## 2. Create Virtual Environment
 
 ```
+
+Create virtual environment
+
+```
+
 python -m venv venv
 venv\Scripts\activate
-```
-
-## 3. Install Dependencies
 
 ```
+
+Install dependencies
+
+```
+
 pip install -r requirements.txt
-```
-
-## 4. Run the Pipeline
 
 ```
+
+Run the ML pipeline
+
+```
+
 python main.py
-```
-
-## 5. Run the Application
 
 ```
+
+Run the web application
+
+```
+
 python app.py
+ulr/train (train the model throgh webapp before predicting)
+
 ```
 
-## 6. Dogshub
-import dagshub
-dagshub.init(repo_owner='Aditya0135', repo_name='Berlin_House_Price_Prediction', mlflow=True)
+---
 
-How to track-:
+## MLflow Tracking
+
+Example usage:
+
+```
+
 import mlflow
+
 with mlflow.start_run():
-  mlflow.log_param('parameter name', 'value')
-  mlflow.log_metric('metric name', 1)
-
-    run this in bash
-    export MLFLOW_TRACKING_URI=https://dagshub.com/Aditya0135/Berlin_House_Price_Prediction.mlflow
-    export MLFLOW_TRACKING_USERNAME=Aditya0135
-    export MLFLOW_TRACKING_PASSWORD=6e8a8ddb2d0dd8158f49b382417192f326f6c900
----
-    AWS ECR repo 
-    URI- 126984677171.dkr.ecr.eu-north-1.amazonaws.com/berlin-house-price-prediction
-
-    #optinal
-
-sudo apt-get update -y
-
-sudo apt-get upgrade
-
-#required
-
-curl -fsSL https://get.docker.com -o get-docker.sh
-
-sudo sh get-docker.sh
-
-sudo usermod -aG docker ubuntu
-
-newgrp docker
-
-# Pipeline Execution Flow
+mlflow.log_param("parameter", "value")
+mlflow.log_metric("metric", 1)
 
 ```
-Data Ingestion
-      ↓
-Data Validation
-      ↓
-Data Transformation
-      ↓
-Model Training
-      ↓
-Model Evaluation
-      ↓
-Prediction Application
+
+---
+
+## AWS Deployment (Docker + ECR + EC2)
+
+General deployment workflow:
+
+1. Build Docker image
+2. Push image to AWS ECR
+3. Pull image on EC2 instance
+4. Run container to serve the application
+
+---
+
+## Project Workflow
+
 ```
 
----
-
-# Design Philosophy
-
-This project follows:
-
-* Modular ML architecture
-* Config-driven pipeline
-* Clean code structure
-* Reproducible experiments
-* Industry-style workflow
-
-Each stage of the pipeline is independent and easy to extend.
-
----
-
-# Future Improvements
-
-Possible future upgrades:
-
-* Feature engineering
-* Hyperparameter tuning pipeline
-* Cross-validation system
-* Model tracking (MLflow)
-* API deployment
-* Docker support
-* Cloud deployment
-* Automated retraining pipeline
-
----
-
-# Workflow Used in This Project
-
-The development of this project follows this order:
-
-```
 1. Update config.yaml
 2. Update schema.yaml
 3. Update params.yaml
@@ -302,6 +156,18 @@ The development of this project follows this order:
 7. Implement pipeline stages
 8. Run main.py
 9. Deploy with app.py
+
 ```
 
-This ensures a structured and scalable ML project workflow.
+---
+
+## Tech Stack
+
+- Python
+- Scikit-learn
+- Flask
+- MLflow
+- Docker
+- AWS (ECR, EC2)
+- GitHub Actions
+```
