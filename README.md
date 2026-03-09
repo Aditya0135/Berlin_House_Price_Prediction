@@ -170,4 +170,3 @@ General deployment workflow:
 - Docker
 - AWS (ECR, EC2)
 - GitHub Actions
-```
